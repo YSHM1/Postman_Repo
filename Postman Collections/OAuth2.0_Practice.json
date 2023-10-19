@@ -1,0 +1,377 @@
+{
+	"info": {
+		"_postman_id": "4d58c57c-1313-448a-baac-7d2152086faa",
+		"name": "OAuth2.0_Practice",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Imgur_OAuth2.0_Request",
+			"id": "b9b37506-5e5f-46a5-a60c-b548d15afc8b",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": {
+						"addTokenTo": "header",
+						"useBrowser": false,
+						"clientSecret": "{{Imgur_Client_Secret}}",
+						"clientId": "{{Imgur_Client_ID}}",
+						"tokenName": "Imgur_OAuth2.0_Token",
+						"accessTokenUrl": "https://api.imgur.com/oauth2/token",
+						"authUrl": "https://api.imgur.com/oauth2/authorize",
+						"redirect_uri": "https://oauth.pstmn.io/v1/browser-callback"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "https://api.imgur.com/3/account/me/images"
+			},
+			"response": []
+		},
+		{
+			"name": "GitHub OAuth2.0 Request Step-1",
+			"id": "7ad4eafd-0303-4959-91b2-7fa0b97e4b1e",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://github.com/login/oauth/authorize?client_id={{Github_Client_ID}}",
+					"protocol": "https",
+					"host": [
+						"github",
+						"com"
+					],
+					"path": [
+						"login",
+						"oauth",
+						"authorize"
+					],
+					"query": [
+						{
+							"key": "client_id",
+							"value": "{{Github_Client_ID}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GitHub OAuth2.0 Request Step-2",
+			"id": "ad4362c8-6a31-477f-a6fc-57d5d3a1feb9",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://github.com/login/oauth/access_token?client_id={{Github_Client_ID}}&client_secret={{Github_Client_Secret}}&code={{Github_Code}}&=",
+					"protocol": "https",
+					"host": [
+						"github",
+						"com"
+					],
+					"path": [
+						"login",
+						"oauth",
+						"access_token"
+					],
+					"query": [
+						{
+							"key": "client_id",
+							"value": "{{Github_Client_ID}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "{{Github_Client_Secret}}",
+							"type": "text"
+						},
+						{
+							"key": "code",
+							"value": "{{Github_Code}}",
+							"type": "text"
+						},
+						{
+							"key": null,
+							"value": "",
+							"type": "text"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GitHub OAuth2.0 Request Step-3",
+			"id": "b4824946-b39d-45f9-82e9-aa6d58b5782c",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": {
+						"addTokenTo": "header",
+						"clientSecret": "",
+						"clientId": "",
+						"accessTokenUrl": "",
+						"authUrl": "",
+						"redirect_uri": "",
+						"tokenName": "",
+						"useBrowser": false
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "https://api.github.com/user"
+			},
+			"response": []
+		},
+		{
+			"name": "Paypal OAuth2.0 Step-1 Access Token Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1b1ad318-2c77-477e-a35e-d6b96448e3a2",
+						"exec": [
+							"let respBody = JSON.parse(responseBody);\r",
+							"let token = respBody.access_token;\r",
+							"console.log(token);\r",
+							"\r",
+							"pm.collectionVariables.set(\"Paypal_Access_Token\", \"Bearer \"+token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "8e653b62-e3d0-4309-987d-fd087a549e51",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": {
+						"password": "{{Paypal_Client_Secret}}",
+						"username": "{{Paypal_Client_ID}}"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						}
+					]
+				},
+				"url": "https://api-m.sandbox.paypal.com/v1/oauth2/token"
+			},
+			"response": []
+		},
+		{
+			"name": "Paypal OAuth2.0 Step-2 Post Order Request Using Access Token",
+			"id": "afd4c3ff-bfab-4d43-bef5-517578af0829",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{Paypal_Access_Token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"intent\": \"CAPTURE\",\r\n  \"purchase_units\": [\r\n    {\r\n      \"reference_id\": \"d9f80740-38f0-11e8-b467-0ed5f89f718b\",\r\n      \"amount\": {\r\n        \"currency_code\": \"USD\",\r\n        \"value\": \"100.00\"\r\n      }\r\n    }\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "https://api-m.sandbox.paypal.com/v2/checkout/orders"
+			},
+			"response": []
+		},
+		{
+			"name": "Paypal OAuth2.0 Step-3 Get Order Request Using Access Token",
+			"id": "baf8f0d5-cc0c-47fd-a9d8-fa5eec7bbf60",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "{{Paypal_Access_Token}}",
+						"type": "text"
+					}
+				],
+				"url": "https://api.sandbox.paypal.com/v2/checkout/orders/8A901780WX6484934"
+			},
+			"response": []
+		},
+		{
+			"name": "Paypal OAuth2.0 Step-4 Get Request in Single Step Request",
+			"id": "655d09ba-232b-4614-a10d-a6ee7625e2da",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": {
+						"accessTokenUrl": "https://api-m.sandbox.paypal.com/v1/oauth2/token",
+						"clientSecret": "{{Paypal_Client_Secret}}",
+						"clientId": "{{Paypal_Client_ID}}",
+						"grant_type": "client_credentials",
+						"redirect_uri": "",
+						"addTokenTo": "header",
+						"tokenName": "My_Token",
+						"authUrl": "",
+						"useBrowser": false
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "https://api.sandbox.paypal.com/v2/checkout/orders/8A901780WX6484934"
+			},
+			"response": []
+		},
+		{
+			"name": "GitHub OAuth2.0 Get Request",
+			"id": "ff8f685a-dbfb-4564-8c88-65501599189e",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": {
+						"clientSecret": "{{Github_Client_Secret}}",
+						"clientId": "{{Github_Client_ID}}",
+						"accessTokenUrl": "https://github.com/login/oauth/access_token",
+						"grant_type": "client_credentials",
+						"redirect_uri": "",
+						"addTokenTo": "header",
+						"tokenName": "My_Token",
+						"authUrl": "",
+						"useBrowser": false
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": "https://api.github.com/user"
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"id": "70dc6601-3b54-45d0-a9a9-e87cb2353d2f",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "26880407-4a05-4bfb-aff9-ff276251f87c",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "c4c7b15c-5054-410a-a8cd-2f092e92a80f",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "Imgur_Client_ID",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "Imgur_Client_Secret",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "Github_Client_ID",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "Github_Client_Secret",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "Github_Code",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "Github_Access_Token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "Paypal_Client_ID",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "Paypal_Client_Secret",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "Paypal_Access_Token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
