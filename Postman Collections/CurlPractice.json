@@ -1,0 +1,91 @@
+{
+	"info": {
+		"_postman_id": "199ce7c3-01e3-49ca-a8c0-4d1ca02da885",
+		"name": "Curl_Practice",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:3000/users",
+			"id": "4825cc72-1612-4aaf-9c9c-87dadd57f7bb",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n    \"id\": 2,\r\n    \"name\": \"Ross\",\r\n    \"location\": \"USA\",\r\n    \"phone\": \"3264214556\",\r\n    \"courses\": [\r\n      \"MT\",\r\n      \"RestAssured\"\r\n    ]\r\n  }"
+				},
+				"url": "http://localhost:3000/users"
+			},
+			"response": []
+		},
+		{
+			"name": "GetURI In Post Method",
+			"id": "8cfad715-dc34-4fbf-b05b-b8f8b53ac9d8",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "GET URI In POST Method",
+			"id": "4be0663d-c6d6-4998-819b-d53bc840f60d",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://reqres.in/api/user?page=2",
+					"protocol": "https",
+					"host": [
+						"reqres",
+						"in"
+					],
+					"path": [
+						"api",
+						"user"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Uri in POST METHOD(405 Method not allowed)",
+			"id": "1ca9f971-dbdd-41bb-b30d-73f8d3620eaf",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Expect",
+						"value": "100-continue"
+					}
+				],
+				"url": "https://dummy.restapiexample.com/api/v1/employees"
+			},
+			"response": []
+		}
+	]
+}
